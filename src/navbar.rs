@@ -5,7 +5,7 @@ use crate::routes::Route;
 #[component]
 pub fn Navbar() -> Element {
     rsx! {
-        div { class: "w-screen mb-12 py-2 px-6 flex flex-row justify-between",
+        div { class: "mx-auto container mb-12 py-2 px-6 sm:px-0 flex flex-row justify-between",
             Link { class: "flex flex-row h-16 text-4xl md:text-5xl select-none cursor-pointer",
                 to: Route::Landing {},
                 VulkanVSvg {}
@@ -21,8 +21,17 @@ pub fn Navbar() -> Element {
         main { class: "mx-auto container mb-24",
             Outlet::<Route> {}
         }
-        footer { class: "w-screen flex flex-row justify-between px-6 text-sm text-gray-400",
-            "Made by kbz_8 with Dioxus"
+        footer { class: "w-screen h-11 flex flex-row justify-start space-x-1 px-6 text-sm text-gray-400",
+            p { "Made by"}
+            a { class: "hover:underline text-white",
+                href: "https://portfolio.kbz8.me/",
+                "kbz_8"
+            }
+            p { "with" }
+            a { class: "hover:underline text-white",
+                href: "https://dioxuslabs.com/",
+                "Dioxus"
+            }
         }
     }
 }

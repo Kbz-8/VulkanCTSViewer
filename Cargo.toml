@@ -2,12 +2,14 @@
 name = "vulkan-cts-analyzer"
 version = "0.1.0"
 authors = ["Kbz-8 <kbz_8.code@proton.me>"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 csv = "1.4.0"
 dioxus = { version = "0.7.2", features = ["router"] }
 dioxus-primitives = { git = "https://github.com/DioxusLabs/components", version = "0.0.1", default-features = false }
+reqwest = "0.12.25"
+strum = { version = "0.27.2", default-features = false, features = ["derive"] }
 
 [features]
 default = ["web"]

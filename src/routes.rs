@@ -1,9 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::{
-    landing::Landing,
-    navbar::Navbar,
-};
+use crate::{landing::Landing, navbar::Navbar};
 
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]

@@ -1,2 +1,3 @@
 // AUTOGENERTED Components module
-pub mod skeleton;
+pub mod select;
+pub mod toast;
