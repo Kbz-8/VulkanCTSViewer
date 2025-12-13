@@ -51,6 +51,7 @@ enum TestStatus {
     Pass,
     Fail,
     Skip,
+    Missing,
     Flake,
     Crash,
 }
@@ -61,6 +62,7 @@ impl TestStatus {
             TestStatus::Pass => "✅",
             TestStatus::Fail => "❌",
             TestStatus::Skip => "❎",
+            TestStatus::Missing => "🚫",
             TestStatus::Flake => "⚠️",
             TestStatus::Crash => "💥",
         }
@@ -71,6 +73,7 @@ impl TestStatus {
             TestStatus::Pass => "#22c55e",
             TestStatus::Fail => "#ff6467",
             TestStatus::Skip => "#ffdf20",
+            TestStatus::Missing => "#F77600",
             TestStatus::Flake => "#38bdf8",
             TestStatus::Crash => "#e7000b",
         }
