@@ -5,8 +5,8 @@ use dioxus::prelude::*;
 use dioxus_primitives::toast::{ToastOptions, use_toast};
 use dioxus_sdk_time::*;
 use std::f32::consts::PI;
-use std::str::FromStr;
 use std::fmt;
+use std::str::FromStr;
 use std::time::Duration;
 use std::{collections::HashMap, thread::current};
 use strum::{EnumCount, IntoEnumIterator};
@@ -195,10 +195,11 @@ pub fn Landing() -> Element {
             "Loading...".to_string(),
             ToastOptions::new()
                 .description("Loading CTS results")
-                .duration(Duration::from_secs(12))
+                .duration(Duration::from_secs(12)),
         );
         get_results()
-    }).load_with(rsx!{
+    })
+    .load_with(rsx! {
         LandingPlaceholder {}
     })?;
     let mut result = use_signal(Vec::<StringRecord>::new);
@@ -215,8 +216,7 @@ pub fn Landing() -> Element {
                     error!("Failed to parse results: {e}");
                     toast.error(
                         "Error".to_string(),
-                        ToastOptions::new()
-                            .description("Failed to parse CTS results")
+                        ToastOptions::new().description("Failed to parse CTS results"),
                     );
                     Vec::new()
                 }
@@ -224,32 +224,36 @@ pub fn Landing() -> Element {
             result.set(records);
             toast.success(
                 "Success".to_string(),
-                ToastOptions::new()
-                    .description("Successfully loaded CTS results")
+                ToastOptions::new().description("Successfully loaded CTS results"),
             );
-        },
+        }
         Err(e) => {
             error!("Failed to fetch results: {e}");
             toast.error(
                 "Error".to_string(),
-                ToastOptions::new()
-                    .description("Failed to fetch CTS results")
+                ToastOptions::new().description("Failed to fetch CTS results"),
             );
         }
     });
 
-    let global_stats = use_memo(move || result
-        .read()
-        .iter()
-        .fold(HashMap::from_iter(TestStatus::iter().map(|s| (s, 0))), |mut acc, record| {
-            if let Ok(status) = TestStatus::from_str(&record[1]) {
-                *acc.entry(status).or_insert(0) += 1;
-            }
-            acc
-        })
-    );
+    let global_stats = use_memo(move || {
+        result.read().iter().fold(
+            HashMap::from_iter(TestStatus::iter().map(|s| (s, 0))),
+            |mut acc, record| {
+                if let Ok(status) = TestStatus::from_str(&record[1]) {
+                    *acc.entry(status).or_insert(0) += 1;
+                }
+                acc
+            },
+        )
+    });
 
-    let total = use_memo(move || global_stats.read().iter().fold(0.0_f32, |acc, (_, v)| acc + *v as f32));
+    let total = use_memo(move || {
+        global_stats
+            .read()
+            .iter()
+            .fold(0.0_f32, |acc, (_, v)| acc + *v as f32)
+    });
 
     let stats_cards = TestStatus::iter().map(|s| {
         rsx! {
@@ -285,7 +289,9 @@ pub fn Landing() -> Element {
             }
 
             if let Some(wanted) = f {
-                let Ok(status) = TestStatus::from_str(&r[1]) else { continue };
+                let Ok(status) = TestStatus::from_str(&r[1]) else {
+                    continue;
+                };
                 if status != wanted {
                     continue;
                 }
@@ -319,7 +325,9 @@ pub fn Landing() -> Element {
             }
 
             if let Some(wanted) = f {
-                let Ok(status) = TestStatus::from_str(&r[1]) else { continue };
+                let Ok(status) = TestStatus::from_str(&r[1]) else {
+                    continue;
+                };
                 if status != wanted {
                     continue;
                 }
@@ -396,7 +404,7 @@ pub fn Landing() -> Element {
                     r#type: "search",
                     placeholder: "Search tests...",
                     oninput: onsearch_input,
-                    onkeyup: onsearch_keyup
+                    onkeyup: onsearch_keyup,
                 }
                 p { class: "my-auto w-fit text-nowrap",
                     "Page {current_page() + 1} of {page_count() + 1}"
@@ -414,7 +422,7 @@ pub fn Landing() -> Element {
                 r#type: "search",
                 placeholder: "Search tests...",
                 oninput: onsearch_input,
-                onkeyup: onsearch_keyup
+                onkeyup: onsearch_keyup,
             }
             div { class: "w-full bg-gray-900 overflow-auto border-1 border-slate-700 rounded-lg text-gray-400",
                 table { class: "w-full border-collapse border-spacing-0",
@@ -533,10 +541,10 @@ fn StatusBadge(status: Option<TestStatus>) -> Element {
             class: "mx-auto border-1 py-1 px-3 rounded-3xl text-xs w-fit select-none",
             style: format!(
                 r#"
-                                background-color: {color}0F;
-                                color: {color};
-                                border-color: {color};
-                            "#,
+                                        background-color: {color}0F;
+                                        color: {color};
+                                        border-color: {color};
+                                    "#,
             ),
             "{name}"
         }
@@ -608,11 +616,7 @@ fn StatsPieChart(stats: ReadSignal<HashMap<TestStatus, usize>>, total: ReadSigna
 }
 
 #[component]
-fn Pagination(
-    current_page: Memo<usize>,
-    page_count: ReadSignal<usize>,
-    small: bool,
-) -> Element {
+fn Pagination(current_page: Memo<usize>, page_count: ReadSignal<usize>, small: bool) -> Element {
     let range = if small { 1_usize } else { 2_usize };
 
     rsx! {
