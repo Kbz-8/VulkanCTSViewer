@@ -50,10 +50,10 @@ impl fmt::Display for HMSDuration {
 enum TestStatus {
     Pass,
     Fail,
+    Warn,
     Skip,
-    Missing,
-    Flake,
     Crash,
+    Timeout,
 }
 
 impl TestStatus {
@@ -62,8 +62,8 @@ impl TestStatus {
             TestStatus::Pass => "✅",
             TestStatus::Fail => "❌",
             TestStatus::Skip => "❎",
-            TestStatus::Missing => "🚫",
-            TestStatus::Flake => "⚠️",
+            TestStatus::Timeout => "⏱️",
+            TestStatus::Warn => "⚠️",
             TestStatus::Crash => "💥",
         }
     }
@@ -72,9 +72,9 @@ impl TestStatus {
         match self {
             TestStatus::Pass => "#22c55e",
             TestStatus::Fail => "#ff6467",
-            TestStatus::Skip => "#ffdf20",
-            TestStatus::Missing => "#F77600",
-            TestStatus::Flake => "#38bdf8",
+            TestStatus::Skip => "#38bdf8",
+            TestStatus::Timeout => "#F77600",
+            TestStatus::Warn => "#ffdf20",
             TestStatus::Crash => "#e7000b",
         }
     }
@@ -283,19 +283,18 @@ pub fn Landing() -> Element {
         let mut total = 0_usize;
 
         for r in rows.iter() {
-            let name = &r[0];
-
-            if let Some(ref s) = search {
-                if !name.contains(s) {
+            let Ok(status) = TestStatus::from_str(&r[1]) else {
+                continue;
+            };
+            if let Some(wanted) = f {
+                if status != wanted {
                     continue;
                 }
             }
 
-            if let Some(wanted) = f {
-                let Ok(status) = TestStatus::from_str(&r[1]) else {
-                    continue;
-                };
-                if status != wanted {
+            let name = &r[0];
+            if let Some(ref s) = search {
+                if !name.contains(s) {
                     continue;
                 }
             }
