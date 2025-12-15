@@ -9,4 +9,4 @@
 *.lock
 
 assets/tailwind.css
-assets/*.csv
+assets/*.zip
