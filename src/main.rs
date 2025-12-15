@@ -17,7 +17,7 @@ const FAVICON: Asset = asset!("/assets/favicon.ico");
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 const COMPONENTS_CSS: Asset = asset!("/assets/dx-components-theme.css");
 const RESULT: Asset = asset!(
-    "/assets/results.csv",
+    "/assets/results.zip",
     AssetOptions::builder().with_hash_suffix(false)
 );
 

@@ -737,10 +737,15 @@ fn PaginationPlaceholder(small: bool) -> Element {
 }
 
 async fn get_results() -> Result<String> {
-    Ok(
-        reqwest::get(format!("{}/assets/results.csv", std::env!("URL")))
-            .await?
-            .text()
-            .await?,
-    )
+    use async_zip::base::read::mem::ZipFileReader;
+    let archive = reqwest::get(format!("{}/assets/results.zip", std::env!("URL")))
+        .await?
+        .bytes()
+        .await?
+        .to_vec();
+    let zip = ZipFileReader::new(archive).await?;
+    let mut string = String::new();
+    let mut reader = zip.reader_with_entry(0).await?;
+    reader.read_to_string_checked(&mut string).await?;
+    Ok(string)
 }

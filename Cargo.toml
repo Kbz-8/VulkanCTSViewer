@@ -11,6 +11,7 @@ dioxus-sdk-time = "0.7.0"
 dioxus-primitives = { git = "https://github.com/DioxusLabs/components", version = "0.0.1", default-features = false }
 reqwest = "0.12.25"
 strum = { version = "0.27.2", default-features = false, features = ["derive"] }
+async_zip = { version = "0.0.18", features = ["full-wasm"] }
 
 [features]
 default = ["web"]
