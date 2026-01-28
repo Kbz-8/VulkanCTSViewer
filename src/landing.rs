@@ -1,14 +1,14 @@
 use crate::components::{select::*, skeleton::*};
-use crate::loader::{Loader, Suspense};
+use crate::loader::Loader;
 use csv::{ReaderBuilder, StringRecord};
 use dioxus::prelude::*;
-use dioxus_primitives::toast::{ToastOptions, use_toast};
+use dioxus_primitives::toast::{use_toast, ToastOptions};
 use dioxus_sdk_time::*;
+use std::collections::HashMap;
 use std::f32::consts::PI;
 use std::fmt;
 use std::str::FromStr;
 use std::time::Duration;
-use std::{collections::HashMap, thread::current};
 use strum::{EnumCount, IntoEnumIterator};
 
 const PAGE_SIZE: usize = 100_usize;
@@ -383,15 +383,19 @@ pub fn Landing() -> Element {
         div {
             class: "flex flex-col space-y-4 rounded-3xl p-4 pt-8 w-full h-fit shadow-xl shadow-slate-950",
             style: "background: linear-gradient(145deg, #020617 0, #02081f 60%, #020617 100%);",
-            div { class: "flex flex-row space-x-4",
-                div { class: "border-1 border-[#38bdf8] bg-[#38bdf8]/15 text-slate-400 w-fit rounded-3xl py-1 px-2 flex flex-row space-x-1 items-center",
-                    div { class: "bg-[#38bdf8] rounded-full size-3" }
-                    p { class: "text-xs", "Total: {total} tests" }
+            div { class: "flex flex-col sm:flex-row space-y-2 sm:space-y-0 justify-between",
+                div { class: "flex flex-row space-x-4",
+                    div { class: "border-1 border-[#38bdf8] bg-[#38bdf8]/15 text-slate-400 w-fit rounded-3xl py-1 px-2 flex flex-row space-x-1 items-center",
+                        div { class: "bg-[#38bdf8] rounded-full size-3" }
+                        p { class: "text-xs", "Total: {total} tests" }
+                    }
+                    div { class: "border-1 border-[#22c55e] bg-[#22c55e]/15 text-slate-400 w-fit rounded-3xl py-1 px-2 flex flex-row space-x-1 items-center",
+                        div { class: "bg-[#22c55e] rounded-full size-3" }
+                        p { class: "text-xs", "Filtered: {filtered_count} tests" }
+                    }
                 }
-                div { class: "border-1 border-[#22c55e] bg-[#22c55e]/15 text-slate-400 w-fit rounded-3xl py-1 px-2 flex flex-row space-x-1 items-center",
-                    div { class: "bg-[#22c55e] rounded-full size-3" }
-                    p { class: "text-xs", "Filtered: {filtered_count} tests" }
-                }
+                p { class: "text-xs text-slate-400 my-auto", "{compile_time::date_str!()}" }
+
             }
             div { class: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4",
                 {stats_cards}
