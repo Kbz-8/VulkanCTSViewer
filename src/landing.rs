@@ -2,7 +2,7 @@ use crate::components::{select::*, skeleton::*};
 use crate::loader::Loader;
 use csv::{ReaderBuilder, StringRecord};
 use dioxus::prelude::*;
-use dioxus_primitives::toast::{use_toast, ToastOptions};
+use dioxus_primitives::toast::{ToastOptions, use_toast};
 use dioxus_sdk_time::*;
 use std::collections::HashMap;
 use std::f32::consts::PI;
@@ -326,10 +326,11 @@ pub fn Landing() -> Element {
                 }
             }
 
+            let Ok(status) = TestStatus::from_str(&r[1]) else {
+                continue;
+            };
+
             if let Some(wanted) = f {
-                let Ok(status) = TestStatus::from_str(&r[1]) else {
-                    continue;
-                };
                 if status != wanted {
                     continue;
                 }
@@ -466,23 +467,22 @@ pub fn Landing() -> Element {
                         }
                     }
                     for test in page.iter() {
-                        tr { class: "text-sm hover:bg-[#38bef7]/5",
-                            td { class: "py-2 px-3", "{&test[0]}" }
-                            td { class: "py-2 px-3",
-                                p { class: "mx-auto w-fit",
-                                    if let Ok(duration) = test[2].parse::<f32>() {
-                                        "{HMSDuration(Duration::from_secs_f32(duration))}"
-                                    } else {
-                                        "Invalid data"
+                        if let Ok(status) = TestStatus::from_str(&test[1]) {
+                            tr { class: "text-sm hover:bg-[#38bef7]/5",
+                                td { class: "py-2 px-3", "{&test[0]}" }
+                                td { class: "py-2 px-3",
+                                    p { class: "mx-auto w-fit",
+                                        if let Ok(duration) = test[2].parse::<f32>() {
+                                            "{HMSDuration(Duration::from_secs_f32(duration))}"
+                                        } else {
+                                            "Invalid data"
+                                        }
                                     }
                                 }
-                            }
-                            td { class: "py-2 px-3",
-                                StatusBadge {
-                                    status: match TestStatus::from_str(&test[1]) {
-                                        Ok(s) => Some(s),
-                                        _ => None,
-                                    },
+                                td { class: "py-2 px-3",
+                                    StatusBadge {
+                                        status
+                                    }
                                 }
                             }
                         }
@@ -532,27 +532,21 @@ fn StatCard(name: String, color: String, count: usize, stat: f32) -> Element {
 }
 
 #[component]
-fn StatusBadge(status: Option<TestStatus>) -> Element {
-    let color = match status {
-        Some(s) => s.color(),
-        None => "#FFF",
-    };
-    let name = match status {
-        Some(s) => s.to_string(),
-        None => "Unrecognized".to_string(),
-    };
-
+fn StatusBadge(status: TestStatus) -> Element {
     rsx! {
         div {
             class: "mx-auto border-1 py-1 px-3 rounded-3xl text-xs w-fit select-none",
             style: format!(
                 r#"
-                                        background-color: {color}0F;
-                                        color: {color};
-                                        border-color: {color};
-                                    "#,
+                    background-color: {}0F;
+                    color: {};
+                    border-color: {};
+                "#,
+                status.color(),
+                status.color(),
+                status.color(),
             ),
-            "{name}"
+            "{status.to_string()}"
         }
     }
 }
