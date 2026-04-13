@@ -210,7 +210,7 @@ pub fn Landing() -> Element {
     use_effect(move || match &*resource.read() {
         Ok(results) => {
             let mut reader = ReaderBuilder::new().from_reader(results.as_bytes());
-            let records = match reader
+            let mut records = match reader
                 .into_records()
                 .collect::<Result<Vec<StringRecord>, csv::Error>>()
             {
@@ -224,6 +224,7 @@ pub fn Landing() -> Element {
                     Vec::new()
                 }
             };
+            records.retain(|record| TestStatus::from_str(&record[1]).is_ok());
             result.set(records);
             toast.success(
                 "Success".to_string(),
