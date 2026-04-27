@@ -149,11 +149,14 @@ fn LandingPlaceholder() -> Element {
                             "Duration (H:M:S.MS)"
                         }
                         th { class: "uppercase bold whitespace-nowrap py-2 px-3",
-                            Select::<Option<TestStatus>> { placeholder: "STATUS",
+                            Select::<Option<TestStatus>> {
                                 SelectTrigger {
                                     class: "select-trigger mx-auto w-fit !bg-transparent !shadow-none !text-gray-400 cursor-pointer uppercase",
                                     aria_label: "Select Trigger",
-                                    SelectValue { class: "!bg-transparent !shadow-none !text-gray-400" }
+                                    SelectValue {
+                                        class: "!bg-transparent !shadow-none !text-gray-400",
+                                        placeholder: "STATUS",
+                                    }
                                 }
                                 SelectList { aria_label: "Select status",
                                     SelectGroup {
@@ -445,12 +448,14 @@ pub fn Landing() -> Element {
                         }
                         th { class: "uppercase bold whitespace-nowrap py-2 px-3",
                             Select::<Option<TestStatus>> {
-                                placeholder: "STATUS",
                                 on_value_change: move |value: Option<Option<TestStatus>>| filter.set(value.unwrap_or(None)),
                                 SelectTrigger {
                                     class: "select-trigger mx-auto w-fit !bg-transparent !shadow-none !text-gray-400 cursor-pointer uppercase",
                                     aria_label: "Select Trigger",
-                                    SelectValue { class: "!bg-transparent !shadow-none !text-gray-400" }
+                                    SelectValue {
+                                        class: "!bg-transparent !shadow-none !text-gray-400",
+                                        placeholder: "STATUS",
+                                    }
                                 }
                                 SelectList { aria_label: "Select status",
                                     SelectGroup {
