@@ -573,8 +573,13 @@ fn StatsPieChart(stats: ReadSignal<HashMap<TestStatus, usize>>, total: ReadSigna
     let mut segments: Vec<Segment> = Vec::new();
     let mut cumulative = 0.0_f32;
 
+    let unskipped_total = use_memo(move || total() - *stats.read().get(&TestStatus::Skip).unwrap_or(&0) as f32);
+
     for (key, val) in stats.read().iter() {
-        let stat = *val as f32 / total();
+        if *key == TestStatus::Skip {
+            continue;
+        }
+        let stat = *val as f32 / unskipped_total();
         if stat > 0.0 {
             segments.push(Segment {
                 percentage: stat * 100.0,
