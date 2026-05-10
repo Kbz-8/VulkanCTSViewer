@@ -1,15 +1,14 @@
 use dioxus::prelude::*;
 use dioxus_primitives::select::{
-    self, SelectGroupLabelProps, SelectGroupProps, SelectListProps, SelectMultiProps,
-    SelectOptionProps, SelectProps, SelectTriggerProps, SelectValueProps,
+    self, SelectGroupLabelProps, SelectGroupProps, SelectListProps, SelectOptionProps, SelectProps,
+    SelectTriggerProps, SelectValueProps,
 };
-use dioxus_primitives::icon;
 
 #[component]
 pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element {
     rsx! {
         select::Select {
-            class: "dx-select",
+            class: "select",
             value: props.value,
             default_value: props.default_value,
             on_value_change: props.on_value_change,
@@ -24,33 +23,14 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
 }
 
 #[component]
-pub fn SelectMulti<T: Clone + PartialEq + 'static>(props: SelectMultiProps<T>) -> Element {
-    rsx! {
-        select::SelectMulti {
-            class: "dx-select",
-            values: props.values,
-            default_values: props.default_values,
-            on_values_change: props.on_values_change,
-            disabled: props.disabled,
-            name: props.name,
-            roving_loop: props.roving_loop,
-            typeahead_timeout: props.typeahead_timeout,
-            attributes: props.attributes,
-            {props.children}
-        }
-    }
-}
-
-#[component]
 pub fn SelectTrigger(props: SelectTriggerProps) -> Element {
     rsx! {
-        select::SelectTrigger { class: "dx-select-trigger", attributes: props.attributes,
+        select::SelectTrigger { attributes: props.attributes,
             {props.children}
-            icon::Icon {
-                class: "dx-select-expand-icon",
-                width: "20px",
-                height: "20px",
-                stroke: "var(--primary-color-7)",
+            svg {
+                class: "select-expand-icon",
+                view_box: "0 0 24 24",
+                xmlns: "http://www.w3.org/2000/svg",
                 polyline { points: "6 9 12 15 18 9" }
             }
         }
@@ -62,7 +42,7 @@ pub fn SelectValue(props: SelectValueProps) -> Element {
     rsx! {
         select::SelectValue {
             placeholder: props.placeholder,
-            attributes: props.attributes,
+            attributes: props.attributes
         }
     }
 }
@@ -71,7 +51,7 @@ pub fn SelectValue(props: SelectValueProps) -> Element {
 pub fn SelectList(props: SelectListProps) -> Element {
     rsx! {
         select::SelectList {
-            class: "dx-select-list",
+            class: "select-list",
             id: props.id,
             attributes: props.attributes,
             {props.children}
@@ -83,7 +63,7 @@ pub fn SelectList(props: SelectListProps) -> Element {
 pub fn SelectGroup(props: SelectGroupProps) -> Element {
     rsx! {
         select::SelectGroup {
-            class: "dx-select-group",
+            class: "select-group",
             disabled: props.disabled,
             id: props.id,
             attributes: props.attributes,
@@ -96,7 +76,7 @@ pub fn SelectGroup(props: SelectGroupProps) -> Element {
 pub fn SelectGroupLabel(props: SelectGroupLabelProps) -> Element {
     rsx! {
         select::SelectGroupLabel {
-            class: "dx-select-group-label",
+            class: "select-group-label",
             id: props.id,
             attributes: props.attributes,
             {props.children}
@@ -108,7 +88,7 @@ pub fn SelectGroupLabel(props: SelectGroupLabelProps) -> Element {
 pub fn SelectOption<T: Clone + PartialEq + 'static>(props: SelectOptionProps<T>) -> Element {
     rsx! {
         select::SelectOption::<T> {
-            class: "dx-select-option",
+            class: "select-option",
             value: props.value,
             text_value: props.text_value,
             disabled: props.disabled,
@@ -126,8 +106,8 @@ pub fn SelectOption<T: Clone + PartialEq + 'static>(props: SelectOptionProps<T>)
 pub fn SelectItemIndicator() -> Element {
     rsx! {
         select::SelectItemIndicator {
-            icon::Icon {
-                class: "dx-select-check-icon",
+            svg {
+                class: "select-check-icon",
                 width: "1rem",
                 height: "1rem",
                 stroke: "var(--secondary-color-5)",
