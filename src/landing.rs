@@ -120,6 +120,9 @@ fn LandingPlaceholder() -> Element {
                     p { class: "text-xs", "Filtered: 0 tests" }
                 }
             }
+            p { class: "text-xs text-slate-400",
+                "Skipped tests are mostly composed of unsupported features/extensions or Vulkan versions; they are not considered failures."
+            }
             div { class: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4",
                 {stats_cards}
             }
@@ -402,6 +405,9 @@ pub fn Landing() -> Element {
                 p { class: "text-xs text-slate-400 my-auto", "{compile_time::date_str!()}" }
 
             }
+            p { class: "text-xs text-slate-400",
+                "Skipped tests are mostly composed of unsupported features/extensions or Vulkan versions; they are not considered failures."
+            }
             div { class: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4",
                 {stats_cards}
             }
@@ -596,6 +602,21 @@ fn StatsPieChart(stats: ReadSignal<HashMap<TestStatus, usize>>, total: ReadSigna
     let cy: f32 = 100.0;
 
     let paths = segments.iter().enumerate().map(|(idx, seg)| {
+        if (seg.end - seg.start) >= 1.0 - f32::EPSILON {
+            return rsx! {
+                circle {
+                    key: "{idx}",
+                    cx: "{cx}",
+                    cy: "{cy}",
+                    r: "{radius}",
+                    fill: "{seg.color}",
+                    opacity: "0.9",
+                    stroke: "rgba(255, 255, 255, 0.1)",
+                    "stroke-width": "1",
+                }
+            };
+        }
+
         let start_angle = seg.start * 2.0 * PI;
         let end_angle = seg.end * 2.0 * PI;
 
